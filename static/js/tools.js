@@ -7,7 +7,7 @@ const es = (selectors) => document.querySelectorAll(selectors)
 const bindEvent = (element, eventName, callback) => element.addEventListener(eventName, callback)
 
 const bindEvents = (elements, eventName, callback) => {
-    for (const i = 0; i < elements.length; i++) {
+    for (let i = 0; i < elements.length; i++) {
         let e = elements[i]
         e.addEventListener(eventName, callback)
     }
