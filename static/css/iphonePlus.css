@@ -2,6 +2,7 @@
     body {
         padding: 0;
         margin: 0;
+        overflow: hidden;
     }
     main, article, section, header {
         position: relative;
@@ -41,11 +42,10 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
-
     section {
         width: 100%;
         margin: 0 auto;
-        transition: all 1s;
+        transition: transform 0.4s;
     }
     .list-line {
         position: relative;
@@ -76,24 +76,32 @@
         margin: 20px 31px 20px 0;
         float: right;
     }
-
-    .todo-delete {
+    .todo-check {
         position: fixed;
         display: inline-block;
-        padding: 18px 13px;
-        height: 32px;
-        width: 32px;
-        right: -61px;
         border: 1px solid white;
         outline: none;
         cursor: pointer;
+    }
+    .check-checked {
+        padding: 14px 30px 22px 30px;
+        height: 32px;
+        width: 32px;
+        left: -95px;
+    }
+    .check-delete {
+        padding: 18px 30px;
+        height: 32px;
+        width: 32px;
+        right: -95px;
         background: #666699;
-        transition: transform 0.5s;
+    }
+    .checked-show {
+        transform: translateX(95px);
     }
     .delete-show {
-        transform: translateX(-61px);
+        transform: translateX(-95px);
     }
-
     .none-pageshow {
         position: relative;
         width: 100%;
@@ -138,7 +146,6 @@
         left: 35px;
         top: 19px;
     }
-
     footer {
         position: fixed;
         bottom: 0;
@@ -153,5 +160,30 @@
         margin: 0;
         font-size: 20px;
         color: #CCCCCC;
+        z-index: 1;
+    }
+    .check-clear {
+        position: fixed;
+        bottom: 0;
+        height: 40px;
+        width: 100%;
+        z-index: 2;
+    }
+    .todo-clear {
+        position: relative;
+        float: left;
+        height: 100%;
+        width: 50%;
+        margin: 0;
+        background: linear-gradient(to bottom, #000000, #666699);
+        border: 1px solid white;
+        outline: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: white;
+        font-family: '黑体';
+    }
+    .letter-spac {
+        letter-spacing: 10px;
     }
 }

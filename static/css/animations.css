@@ -29,15 +29,15 @@
 
 .section-out {
     animation-name: out;
-    animation-duration: 0.5s;
+    animation-duration: 0.4s;
 }
 
 .section-in {
     animation-name: in;
-    animation-duration: 0.5s;
+    animation-duration: 0.4s;
 }
 
 .op {
     animation-name: op;
-    animation-duration: 0.5s;
+    animation-duration: 0.4s;
 }

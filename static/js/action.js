@@ -1,68 +1,3 @@
-const templateTodo = (d) => {
-    let task = d.task
-    let id = d.id
-    let status = d.status
-    let html = `
-        <section data-id="${id}" data-status="${status}" class="section-in">
-            <p class="p-todo">
-                ${task}
-            </p>
-            <img src="icon/checkbox.png" class="todo-status">
-            <img class="todo-delete" src="icon/delete.png"/>
-        </section>
-    `
-    return html
-}
-
-const templateComp = (d) => {
-    let task = d.task
-    let id = d.id
-    let status = d.status
-    let html = `
-        <section data-id="${id}" data-status="${status}" class="section-in">
-            <p class="p-comp">
-                ${task}
-            </p>
-            <img src="icon/checkbox2.png" class="todo-status">
-            <img class="todo-delete" src="icon/delete.png"/>
-        </section>
-    `
-    return html
-}
-
-const insertTodo = (d) => {
-    let todoDiv = e('#list-todo')
-    let html = templateTodo(d)
-    appendHTML(todoDiv, html)
-}
-
-const insertComp = (d) => {
-    let compDiv = e('#list-comp')
-    let html = templateComp(d)
-    appendHTML(compDiv, html)
-}
-
-const insertTodos = (data) => {
-    data = JSON.parse(data)
-    for (var i = 0; i < data.length; i++) {
-        let d = data[i]
-        if (d.status == false) {
-            insertTodo(d)
-        } else if (d.status == true) {
-            insertComp(d)
-        }
-    }
-}
-
-// const actionReload = () => {
-//     var reload = e('#todo-reload')
-//     bindEvent(reload, 'click', () => {
-//         log('click reload')
-//         // 刷新页面
-//         location.reload()
-//     })
-// }
-
 // 统计每项有多少个
 const actionInfo = (data) => {
     let todo = 0
@@ -88,6 +23,22 @@ const desktopShow = (data) => {
         e('.none-pageshow').classList.add('dis')
     }
 }
+
+/*
+    *** 禁止滑动
+    项目里没什么用, 就当学习了, 备份以后用
+*/
+// const banTouchmove = () => {
+//     let clear = e('.check-clear')
+//     if (!clear.classList.contains('dis')) {
+//         let main = e('main')
+//         bindEvent(main, 'touchmove', (e) => {
+//             log(e.target)
+//             e.preventDefault()
+//             e.stopPropagation()
+//         })
+//     }
+// }
 
 const todosInfo = () => {
     apiTodoAll((data) => {
@@ -142,16 +93,17 @@ const actionAddTodo = () => {
 
 // 状态更新
 const completeAnimation = (div, d) => {
+    d = JSON.parse(d)
     let p = div.querySelector('p')
     p.classList.toggle('p-todo')
     p.classList.toggle('p-comp')
     div.classList.remove('section-in')
+    // 经测试, 感觉 0.3秒 比较舒服, 0.5s 稍微有一点慢, 以后应该多看别人的实例
     let time = setTimeout(() => {
         div.classList.add('section-out')
-    }, 500)
+    }, 300)
     bindEvent(div, 'animationend', () => {
         div.classList.remove('section-out')
-        d = JSON.parse(d)
         if (d.status == false) {
             insertTodo(d)
         } else if (d.status == true) {
@@ -196,6 +148,7 @@ const actionTouchmove = () => {
     // result = 滑动状态, -1:静止, 0:右, 1:左
     let result = -1
     let main = e('main')
+    let clear = e('.check-clear')
     bindEvent(main, 'touchstart', (e) => {
         if (e.target.closest('section') != null) {
             startX = e.changedTouches[0].pageX
@@ -216,43 +169,125 @@ const actionTouchmove = () => {
         }
     })
     bindEvent(main, 'touchend', (e) => {
-        if (e.target.closest('section') != null) {
+        if (e.target.closest('section') != null && clear.classList.contains('dis')) {
             let self = e.target
             let div = self.closest('section')
-            let del = div.querySelector('.todo-delete')
-            if (result == 1 && !del.classList.contains('delete-show')) {
-                del.classList.toggle('delete-show')
+            if (result == 1 && !div.classList.contains('delete-show')) {
+                div.classList.toggle('delete-show')
                 result = -1
-            } else if (result == 0 && del.classList.contains('delete-show')) {
-                del.classList.toggle('delete-show')
+            } else if (result == 0 && div.classList.contains('delete-show')) {
+                div.classList.toggle('delete-show')
                 result = -1
             }
         }
     })
 }
 
-const actionDelete = () => {
+const actionSingleDelete = () => {
     bindEvent(e('main'), 'touchstart', (e) => {
-        if (e.target.classList.contains('todo-delete')) {
+        if (e.target.classList.contains('check-delete')) {
             let self = e.target
             let div = self.closest('section')
             let id = Number(div.dataset.id)
-            apiTodoDelete(id, (d) => {
+            apiTodoDelete(id, () => {
                 div.classList.toggle('op')
                 bindEvent(div, 'animationend', () => {
                     div.remove()
                 })
-                apiTodoAll((data) => {
-                    data = JSON.parse(data)
-                    desktopShow(data)
-                })
+                todosInfo()
             })
         }
         todosInfo()
     })
 }
 
+// 批量删除
+const checkDivExit = () => {
+    let sections = es('section')
+    for (var i = 0; i < sections.length; i++) {
+        let s = sections[i]
+        s.classList.toggle('checked-show')
+        let check = s.querySelector('.check-checked')
+        check.classList.toggle('dis')
+        check.src = 'icon/check.png'
+        check.dataset.id = 0
+    }
+    let clear = e('.check-clear')
+    clear.classList.toggle('dis')
+    let ok = e('#todo-clear-ok')
+    ok.classList.add('letter-spac')
+    ok.innerHTML = '删除'
+    todosInfo()
+}
 
+const checkAnimation = () => {
+    let menu = e('#todo-menu')
+    bindEvent(menu, 'touchstart', () => {
+        apiTodoAll((data) => {
+            data = JSON.parse(data)
+            if (data.length != 0) {
+                checkDivExit()
+            }
+        })
+    })
+}
+
+const actionCheck = (array) => {
+    bindEvent(e('main'), 'touchstart', (e) => {
+        let self = e.target
+        let selfId = Number(self.dataset.id)
+        let div = self.closest('section')
+        if (self.classList.contains('check-checked')) {
+            if (selfId == 1) {
+                self.src = 'icon/check.png'
+                _.pull(array, div)
+            } else if (selfId == 0) {
+                self.src = 'icon/check2.png'
+                array.push(div)
+            }
+            self.dataset.id = (selfId + 1) % 2
+        }
+    })
+}
+
+const actionAllDelete = (array) => {
+    let clear = e('#todo-clear-ok')
+    bindEvent(clear, 'touchstart', () => {
+        if (array.length == 0) {
+            clear.classList.remove('letter-spac')
+            clear.innerHTML = '(・`ω´･) 选一个'
+        } else {
+            for (var i = 0; i < array.length; i++) {
+                let div = array[i]
+                let id = div.dataset.id
+                // 这里重复了, 应该提取出来 *******************
+                apiTodoDelete(id, () => {
+                    div.classList.toggle('op')
+                    bindEvent(div, 'animationend', () => {
+                        div.remove()
+                    })
+                    todosInfo()
+                })
+            }
+            checkDivExit()
+        }
+    })
+}
+
+const actionCheckExit = () => {
+    let exit = e('#todo-clear-exit')
+    bindEvent(exit, 'touchstart', () => {
+        checkDivExit()
+    })
+}
+
+const actionClearTodo = () => {
+    var result = []
+    checkAnimation()
+    actionCheck(result)
+    actionAllDelete(result)
+    actionCheckExit()
+}
 
 // 加载全部
 const loadTodos = () => {
@@ -266,13 +301,6 @@ const actionClass = () => {
     actionAddTodo()
     actionComplete()
     actionTouchmove()
-    actionDelete()
+    actionSingleDelete()
+    actionClearTodo()
 }
-
-const __main = () => {
-    loadTodos()
-    todosInfo()
-    actionClass()
-}
-
-__main()

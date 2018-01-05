@@ -6,12 +6,14 @@
         <title>todolist</title>
         <link rel="stylesheet" href="css/iphonePlus.css" charset="utf-8">
         <link rel="stylesheet" href="css/animations.css" charset="utf-8">
+        <!-- Lodash -->
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
     </head>
     <body>
         <div class="todo-list">
             <aside class="dis">
                 <div class="add-input-div">
-                    <input class="add-input" id="todo-input" placeholder=" to do something ">
+                    <input class="add-input" id="todo-input" maxlength="22" placeholder=" to do something ">
                     <img class="add-input-submit" id="todo-submit" src="icon/submit.png"/>
                 </div>
             </aside>
@@ -23,31 +25,48 @@
             <main>
                 <article id="list-todo">
                     <!-- <section>
+                        <img class="todo-check check-checked dis" src="icon/check.png">
                         <p class="p-todo">
                             内容 1
                         </p>
                         <img src="icon/checkbox.png" class="todo-status">
-                        <img class="todo-delete" src="icon/delete.png"/>
+                        <img class="todo-check check-delete" src="icon/delete.png"/>
                     </section> -->
                 </article>
                 <div class="list-line dis"></div>
                 <article id="list-comp">
                     <!-- <section>
+                        <img class="todo-check check-checked dis" src="icon/check.png">
                         <p class="p-comp">
-                            内容 1
+                            内容 2
                         </p>
                         <img src="icon/checkbox2.png" class="todo-status">
-                        <img class="todo-delete" src="icon/delete.png"/>
+                        <img class="todo-check check-delete" src="icon/delete.png"/>
                     </section> -->
                 </article>
                 <p class="none-pageshow dis">(っ °Д °;)っ</p>
             </main>
             <footer>
+                <div class="check-clear dis">
+                    <button type="button" name="button" class="todo-clear letter-spac" id="todo-clear-ok">删除</button>
+                    <button type="button" name="button" class="todo-clear letter-spac" id="todo-clear-exit">取消</button>
+                </div>
                 <p class="list-status"></p>
             </footer>
         </div>
         <script src="js/tools.js"></script>
         <script src="js/api.js"></script>
-        <script src="js/todo.js"></script>
+        <script src="js/insertHTML.js"></script>
+        <script src="js/action.js"></script>
+        <script type="text/javascript">
+            // 入口
+            const __main = () => {
+                loadTodos()
+                todosInfo()
+                actionClass()
+            }
+
+            __main()
+        </script>
     </body>
 </html>
