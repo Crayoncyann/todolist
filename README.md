@@ -3,7 +3,7 @@
 
 - iphonePlus示例图
 
-![mylist](todolist/screenshots/iphone6Plus-mylist.gif)
+![mylist](https://github.com/Crayoncyann/todolist/blob/master/screenshots/iphone6Plus-mylist.gif)
 
 
 ## 基本功能
@@ -46,10 +46,12 @@
 1. 安装 express 和 body-parser, 在项目路径运行
    > ```yarn add express```
    > ```yarn add body-parser```
+
    也可直接运行 yarn, 按照 package 自行安装
    > ```yarn install```
 2. 运行 app 文件
    > ```node app.js```
+
    提示运行成功即可
 3. 在浏览器中访问提示中的地址 localhost:8000
    使用开发者模式, 变更 device toolbar,  选择 iphone6 以上的 Plus 版本
