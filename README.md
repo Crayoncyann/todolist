@@ -24,14 +24,14 @@
 
 ## 构造过程
 
-1. 使用 *HTML5* 和 *CSS3* 编写静态页面
-2. 基于 *Node.js* 和 *Express* 搭建后端
+1. 使用 **HTML5** 和 **CSS3** 编写静态页面
+2. 基于 **Node.js** 和 **Express** 搭建后端
 - 配置静态路径
 - ~~配置 DB~~
 - 配置路由(动态)
 - 配置 API
 - 配置地址(选择本地8000端口)
-3. 使用 *JavaScript* 渲染页面
+3. 使用 **JavaScript** 渲染页面
 - 原生 JavaScript 封装 AJAX
 - 获取数据并渲染
 - 绑定事件(touch, move, animation 等)
