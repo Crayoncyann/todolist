@@ -14,17 +14,18 @@
         background: linear-gradient(to bottom, #000000, #666699);
     }
     header button{
-        font-size: 44px;
         top: 50%;
         transform: translateY(-50%);
-        color: white;
     }
     .header-button {
         border: none;
         outline: none;
         cursor: pointer;
         background: none;
-        width: 50px;
+        height: 26px;
+        width: 26px;
+        padding: 12px;
+        top: 13px;
     }
     .float-right {
         position: absolute;
@@ -34,10 +35,10 @@
         position: absolute;
         left: 20px;
     }
-    .header-title {
+    .header-logo {
         position: absolute;
-        font-size: 32px;
-        color: white;
+        /*font-size: 32px;*/
+        /*color: white;*/
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -46,6 +47,7 @@
         width: 100%;
         margin: 0 auto;
         transition: transform 0.4s;
+        border-bottom: 1px solid #F0F0F0;
     }
     .list-line {
         position: relative;
@@ -57,12 +59,23 @@
         position: relative;
         display: inline-block;
         font-size: 23px;
-        bottom: 5px;
         margin: 20px 0;
         left: 35px;
+        width: 280px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .p-space-no {
+        white-space: nowrap;
+    }
+    .p-space-pre {
+        white-space: pre-line;
     }
     .p-todo {
         color: #666699;
+    }
+    .p-border {
+        border: 2px solid #FFCC99;
     }
     .p-comp {
         color: #CCCCCC;
@@ -73,8 +86,16 @@
         display: inline-block;
         width: 26px;
         height: 26px;
-        margin: 20px 31px 20px 0;
+        margin: 22px 31px 0 0;
         float: right;
+    }
+    .todo-update {
+        position: absolute;
+        display: inline-block;
+        width: 26px;
+        height: 26px;
+        margin: 23px 31px 0 0;
+        right: 70px;
     }
     .todo-check {
         position: fixed;
@@ -84,13 +105,13 @@
         cursor: pointer;
     }
     .check-checked {
-        padding: 14px 30px 22px 30px;
+        padding: 18px 30px 23px 30px;
         height: 32px;
         width: 32px;
         left: -95px;
     }
     .check-delete {
-        padding: 18px 30px;
+        padding: 19px 30px 22px;
         height: 32px;
         width: 32px;
         right: -95px;

@@ -51,8 +51,9 @@ const todosInfo = () => {
 // 添加
 const actionAdd = () => {
     let add = e('#todo-add')
-    bindEvent(add, 'touchstart', () => {
-        e('aside').classList.toggle('dis')
+    let aside = e('aside')
+    bindEvent(add, 'touchstart', (e) => {
+        aside.classList.toggle('dis')
     })
 }
 
@@ -222,7 +223,7 @@ const checkDivExit = () => {
 
 const checkAnimation = () => {
     let menu = e('#todo-menu')
-    bindEvent(menu, 'touchstart', () => {
+    bindEvent(menu, 'touchstart', (e) => {
         apiTodoAll((data) => {
             data = JSON.parse(data)
             if (data.length != 0) {
@@ -296,6 +297,71 @@ const loadTodos = () => {
     })
 }
 
+// 更新
+const todoEditShow = () => {
+    let time = null
+    let st = 2
+    let et = 0
+    // 一个定时器, 手指按住 1s 后, 文字才可编辑
+    bindEvent(e('#list-todo'), 'touchstart', (e) => {
+        if (e.target.classList.contains('p-todo')) {
+            time = setInterval(() => {
+                et += 1
+            }, 500)
+        }
+    })
+    bindEvent(e('#list-todo'), 'touchend', (e) => {
+        clearInterval(time)
+        if (e.target.classList.contains('p-todo')) {
+            if (et - st >= 0) {
+                e.target.contentEditable = 'true'
+                e.target.classList.add('p-border')
+                let div = e.target.closest('section')
+                let update = div.querySelector('.todo-update')
+                update.classList.toggle('dis')
+                let p = div.querySelector('p')
+                p.classList.remove('p-space-no')
+                p.classList.add('p-space-pre')
+            }
+            et = 0
+        }
+    })
+}
+
+const todoUpdate = () => {
+    bindEvent(e('main'), 'touchstart', (e) => {
+        let div = e.target.closest('section')
+        let p = div.querySelector('p')
+        let value = p.innerText
+        let id = Number(div.dataset.id)
+        let update = div.querySelector('.todo-update')
+        if (e.target.classList.contains('todo-update') && p.contentEditable == 'true') {
+            if (value.length > 15) {
+                let text = value
+                p.innerText = 'input so long (,,•́ . •̀,,)'
+                setTimeout(() => {
+                    p.innerText = text
+                }, 800)
+            } else {
+                apiTodoUpdate(id, value, (data) => {
+                    data = JSON.parse(data)
+                    div.remove()
+                    insertTodo(data)
+                })
+                p.contentEditable = 'false'
+                update.classList.toggle('dis')
+                p.classList.remove('p-space-pre')
+                p.classList.add('p-space-no')
+            }
+        }
+    })
+}
+
+const actionUpdate = () => {
+    todoEditShow()
+    todoUpdate()
+}
+
 // 应用
 const actionClass = () => {
     actionAddTodo()
@@ -303,4 +369,5 @@ const actionClass = () => {
     actionTouchmove()
     actionSingleDelete()
     actionClearTodo()
+    actionUpdate()
 }

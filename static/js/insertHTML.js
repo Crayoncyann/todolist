@@ -1,14 +1,13 @@
 const templateTodo = (d) => {
-    let task = d.task
+    let content = d.content
     let id = d.id
     let status = d.status
     let html = `
         <section data-id="${id}" data-status="${status}" class="section-in">
             <img class="todo-check check-checked dis" src="icon/check.png" data-id="0">
-            <p class="p-todo">
-                ${task}
-            </p>
+            <p class="p-todo p-space-no" contentEditable="false">${content}</p>
             <img src="icon/checkbox.png" class="todo-status">
+            <img src="icon/update.png" class="todo-update dis">
             <img class="todo-check check-delete" src="icon/delete.png"/>
         </section>
     `
@@ -16,15 +15,13 @@ const templateTodo = (d) => {
 }
 
 const templateComp = (d) => {
-    let task = d.task
+    let content = d.content
     let id = d.id
     let status = d.status
     let html = `
         <section data-id="${id}" data-status="${status}" class="section-in">
             <img class="todo-check check-checked dis" src="icon/check.png" data-id="0">
-            <p class="p-comp">
-                ${task}
-            </p>
+            <p class="p-comp p-space-no" contentEditable="false">${content}</p>
             <img src="icon/checkbox2.png" class="todo-status">
             <img class="todo-check check-delete" src="icon/delete.png"/>
         </section>

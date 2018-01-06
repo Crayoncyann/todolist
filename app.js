@@ -111,6 +111,26 @@ app.get('/complete/:id', (request, response) => {
     sendJSON(response, todo)
 })
 
+const todoUpdate = (id, form) => {
+    id = Number(id)
+    for (var i = 0; i < todoList.length; i++) {
+        let t = todoList[i]
+        if (t.id == id) {
+            todoList.splice(i, 1)[0]
+            todoList.push(form)
+            return form
+        }
+    }
+    return {}
+}
+
+app.post('/update/:id', (request, response) => {
+    let id = request.params.id
+    let form = request.body
+    let todo = todoUpdate(id, form)
+    sendJSON(response, todo)
+})
+
 // 监听 localhost:8000
 const server = app.listen(8000, (...args) => {
     let host = server.address().address
